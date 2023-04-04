@@ -5,6 +5,18 @@ const listings = new Schema({
         type:String,
         require:true
     },
+    twitter:{
+        type:String,
+        require:true
+    },
+    uploadlink:{
+        type:String,
+        require:true
+    },
+    dribble:{
+        type:String,
+        require:true
+    },
     address:{
         type:String,
         require:true
@@ -23,6 +35,10 @@ const listings = new Schema({
     },
     zipcode:{
         type:Number,
+        require:true
+    },
+    descriptions:{
+        type:String,
         require:true
     },
     linkedin:{
