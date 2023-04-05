@@ -8,7 +8,7 @@ const categories = new Schema({
       },
       image: {
         type: String
-      },
+      }, 
       icon: {
         type: String
       }
