@@ -4,7 +4,7 @@ const {Company} = require('../Model/Company.js');
 const getCompany = async (req, res) => {
 
     try {
-      const company = await Company.findOne();
+      const company = await Company.find();
       console.log(company);
       if (!company) {
         return res.status(404).json({ message: 'Company not found' });
@@ -41,7 +41,48 @@ const getCompany = async (req, res) => {
     }
   };
 
+
+  const createCompany = async (req, res) => {
+    const { email,phone, socialLinks,splashScreen,address,icon,termsAndConditions,privacyPolicy} = req.body;
+
+    try {
+        const company = new Company({
+          email,
+          phone,
+          socialLinks,
+          splashScreen,
+          address,
+          icon,
+          termsAndConditions,
+          privacyPolicy
+        });
+
+        const newCompany = await company.save();
+        res.status(201).json(newCompany);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+  }
+
+  const deleteCompany = async (req, res) => {
+    try {
+      const company = await Company.findById(req.params.id);
+      if (!company) {
+          return res.status(404).json({ message: 'Company not found' });
+      }
+
+      await company.remove();
+      res.status(200).json({ message: 'Company deleted successfully' });
+  } catch (err) {
+      res.status(500).json({
+          message: err.message
+      });
+  }
+  }
+
   module.exports = {
     getCompany,
-    updateCompany
+    updateCompany,
+    createCompany,
+    deleteCompany
   }

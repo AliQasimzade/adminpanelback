@@ -10,7 +10,7 @@ const statusRouter = require('./Router/Status.js')
 const bannersRouter = require('./Router/Banners.js')
 const propertiesRouter = require('./Router/Properties.js')
 const categoriesRouter = require('./Router/Categories.js')
-const locationsRouter = require('./Router/Locations.js')
+const locationsRouter = require('./Router/Locations.js');
 const tagsRouter = require('./Router/Tags.js')
 dotenv.config()
 const app = express();

@@ -2,8 +2,8 @@ const {Status} = require('../Model/Status.js');
 
 const createStatus = async (req, res) => {
     try {
-      const { content, sharedBy, userProfilePicture } = req.body;
-      const status = new Status({ content, sharedBy, userProfilePicture });
+      const { content, sharedBy, userProfilePicture,image } = req.body;
+      const status = new Status({ content, sharedBy, userProfilePicture,image });
       await status.save();
       res.status(201).json(status);
     } catch (err) {
@@ -32,13 +32,14 @@ const createStatus = async (req, res) => {
   
   const updateStatus = async (req, res) => {
     try {
-      const { content, sharedBy, userProfilePicture } = req.body;
+      const { content, sharedBy, userProfilePicture,image } = req.body;
       const status = await Status.findById(req.params.id);
       if (!status) {
         return res.status(404).json({ message: 'Status not found' });
       }
       status.content = content ? content : status.content;
       status.sharedBy = sharedBy ? sharedBy : status.sharedBy;
+      status.image = image ? image : status.image;
       status.userProfilePicture = userProfilePicture ? userProfilePicture : status.userProfilePicture;
       await status.save();
       res.json(status);

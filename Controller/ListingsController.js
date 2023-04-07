@@ -6,38 +6,39 @@ const GetListings = async (req, res) => {
 };
 
 const addListing = async (req, res) => {
-    const { address, bathroom, bedroom, 
+    const { address, 
         category,email,zipcode,listingTitle,
         facebook,linkedin,description,
-        image,livingarea,phone,price,
-        previousprice,publishdate,roadorstate,
-        cityorstate,garageorparkingslot,yearinbuilt,website,
-        listingKeywords,tags,timeschedule,features
+        image,splashscreen,phone,price,
+        previousprice,whatsapp,roadorstate,
+        cityorstate,profileImage,website,
+        tags,timeschedule,features,
+        slogan,dribble,uploadlink,twitter
     } = req.body;
     try {
         const newListing = new Listings({
             address: address,
-            bedroom: bedroom,
-            bathroom: bathroom,
             category: category,
             email:email,
             zipcode:zipcode,
+            twitter:twitter,
+            uploadlink:uploadlink,
             listingTitle:listingTitle,
             facebook:facebook,
+            dribble:dribble,
             linkedin:linkedin,
             description:description,
             image:image,
-            livingarea:livingarea,
+            splashscreen:splashscreen,
             phone:phone,
             price:price,
             previousprice:previousprice,
-            publishdate:publishdate,
+            whatsapp:whatsapp,
             roadorstate:roadorstate,
             cityorstate:cityorstate,
-            garageorparkingslot:garageorparkingslot,
-            yearinbuilt:yearinbuilt,
+            profileImage:profileImage,
+            slogan:slogan,
             website:website,
-            listingKeywords:listingKeywords,
             tags:tags,
             features:features,
             timeschedule:timeschedule
@@ -60,42 +61,41 @@ const deleteListing = async (req,res) => {
 
 const updateListing = async (req,res) => {
     const listing_id = req.params.id
-    const { address, bathroom, bedroom, 
+    const { address, splashscreen,
         category,email,zipcode,listingTitle,
         facebook,linkedin,description,
-        image,livingarea,phone,price,
-        previousprice,publishdate,roadorstate,
-        cityorstate,garageorparkingslot,yearinbuilt,website,
-        listingKeywords,tags,timeschedule,features
+        image,profileImage,phone,price,
+        previousprice,whatsapp,roadorstate,
+        cityorstate,website,
+        slogan,tags,timeschedule,features,uploadlink,twitter,dribble
     } = req.body;
     try {
         await Listings.findById(listing_id,(err,updated)=>{
             updated.address = address ? address:updated.address,
             updated.description = description ? description : updated.description,
             updated.price = price ? price : updated.price,
-            updated.bathroom = bathroom ? bathroom : updated.bathroom,
-            updated.bedroom = bedroom ? bedroom : updated.bedroom,
+            updated.splashscreen = splashscreen ? splashscreen : updated.splashscreen,
+            updated.profileImage = profileImage ? profileImage : updated.profileImage,
             updated.category = category ? category : updated.category,
             updated.email = email ? email : updated.email,
             updated.zipcode = zipcode ? zipcode : updated.zipcode,
             updated.listingTitle = listingTitle ? listingTitle : updated.listingTitle,
             updated.facebook = facebook ? facebook : updated.facebook,
             updated.linkedin = linkedin ? linkedin : updated.linkedin,
-            updated.livingarea = livingarea ? livingarea : updated.livingarea,
+            updated.whatsapp = whatsapp ? whatsapp : updated.whatsapp,
             updated.phone = phone ? phone : updated.phone,
             updated.image = image ? image : updated.image,
             updated.previousprice = previousprice ? previousprice : updated.previousprice,
-            updated.publishdate = publishdate ? publishdate : updated.publishdate,
+            updated.dribble = dribble ? dribble : updated.dribble,
             updated.roadorstate = roadorstate ? roadorstate : updated.roadorstate,
             updated.cityorstate = cityorstate ? cityorstate : updated.cityorstate,
-            updated.garageorparkingslot = garageorparkingslot ? garageorparkingslot : updated.garageorparkingslot,
-            updated.yearinbuilt = yearinbuilt ? yearinbuilt : updated.yearinbuilt,
+            updated.slogan = slogan ? slogan : updated.slogan,
+            updated.uploadlink = uploadlink ? uploadlink : updated.uploadlink,
             updated.website = website ? website : updated.website,
-            updated.listingKeywords = listingKeywords ? listingKeywords : updated.listingKeywords,
+            updated.twitter = twitter ? twitter : updated.twitter,
             updated.tags = tags ? tags : updated.tags,
             updated.timeschedule = timeschedule ? timeschedule : updated.timeschedule,
             updated.features = features ? features : updated.features,
-
             updated.save();
 
             return res.status(200).json({message:`${listing_id} listing updated succesfully`})
