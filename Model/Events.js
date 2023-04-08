@@ -14,6 +14,10 @@ const events = Schema({
       type: String,
       required: true
     },
+    image:{
+      type:String,
+      require:true
+    },
     locationAddress: {
       type: String,
       required: true

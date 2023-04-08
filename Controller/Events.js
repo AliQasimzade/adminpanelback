@@ -24,7 +24,7 @@ const getEventById = async (req, res) => {
 
 
 const createEvent = async (req, res) => {
-    const { name, description, locationName, locationAddress, startDate, endDate, entryPrice, contactInfo, details } = req.body;
+    const { name, description, locationName, locationAddress,image, startDate, endDate, entryPrice, contactInfo, details } = req.body;
 
     try {
         const event = new Events({
@@ -36,7 +36,8 @@ const createEvent = async (req, res) => {
             endDate,
             entryPrice,
             contactInfo,
-            details
+            details,
+            image
         });
 
         const newEvent = await event.save();
@@ -48,7 +49,7 @@ const createEvent = async (req, res) => {
 
 
 const updateEvent = async (req, res) => {
-    const { name, description, locationName, locationAddress, startDate, endDate, entryPrice, contactInfo, details } = req.body;
+    const { name, description, locationName,image, locationAddress, startDate, endDate, entryPrice, contactInfo, details } = req.body;
 
     try {
         const event = await Events.findById(req.params.id);
@@ -57,6 +58,7 @@ const updateEvent = async (req, res) => {
         }
 
         event.name = name ? name : event.name;
+        event.image = image ? image : event.image;
         event.description = description ? description : event.description;
         event.locationName = locationName ? locationName : event.locationName;
         event.locationAddress = locationAddress ? locationAddress : event.locationAddress;

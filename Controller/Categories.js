@@ -23,12 +23,13 @@ const getAllCategories = async (req, res) => {
 
 
   const createCategory = async (req, res) => {
-    const { name, image, icon } = req.body;
+    const { name, image, icon,color } = req.body;
   
     const category = new Categories({
       name,
       image,
-      icon
+      icon,
+      color
     });
   
     try {
@@ -41,7 +42,7 @@ const getAllCategories = async (req, res) => {
 
 
   const updateCategory = async (req, res) => {
-    const { name, image, icon } = req.body;
+    const { name, image, icon,color } = req.body;
   
     try {
       const category = await Categories.findById(req.params.id);
@@ -52,6 +53,7 @@ const getAllCategories = async (req, res) => {
       category.name = name ? name : category.name;
       category.image = image ? image : category.image;
       category.icon = icon ? icon : category.icon;
+      category.color = color ? color : category.color;
   
       const updatedCategory = await category.save();
       res.status(200).json(updatedCategory);

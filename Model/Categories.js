@@ -7,10 +7,16 @@ const categories = new Schema({
         required: true
       },
       image: {
-        type: String
+        type: String,
+        require:true
       }, 
       icon: {
-        type: String
+        type: String,
+        require:true
+      },
+      color:{
+        type:String,
+        require:true
       }
 },{timestamps:true})
 
