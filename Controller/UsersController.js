@@ -16,7 +16,7 @@ const getAllUsers = async (req, res) => {
         const user = await Users.findOne({email:email});
         if(!user) return res.json("This user is not registered");
         if(password !== user.password) return res.json("Password is not correct");
-        return res.status(200).json({message:"User logged in succesfully",user:user})
+        return res.status(200).json({message:"User logged in succesfully", user})
         
     } catch (error) {
         return res.json("Error:",error.message)
@@ -26,12 +26,13 @@ const getAllUsers = async (req, res) => {
 
   
 const createUser = async (req, res) => {
-    const {name,surname,email,password} = req.body;
+    const {name,surname,email,password,phone} = req.body;
     const user = await Users.findOne({email:email});
     if(user) return res.json("This user already exsist");
     const newUser = new Users({
-        name:name,
-        surname:surname,
+        name:name ? name : '',
+        surname:surname ? surname : '',
+        phone:phone ? phone : '',
         email:email,
         password:password,
         isAdmin:false

@@ -10,6 +10,22 @@ const listings = new Schema({
         type: String,
         require: true
     },
+    locationCoords: {
+        type: Object,
+        require: true
+
+    },
+
+    rating_avg:{
+        type:Number
+    },
+    reviews:{
+        type:Object,
+    },
+    type: {
+        type: String,
+        require: true
+    },
     uploadlink: {
         type: String,
         require: true
@@ -58,8 +74,8 @@ const listings = new Schema({
         type: String,
         require: true
     },
-    image: {
-        type: String,
+    gallery: {
+        type: Object,
         require: true
     },
     price: {
@@ -83,9 +99,9 @@ const listings = new Schema({
         type: String,
         require: true
     },
-    profileImage:{
-        type:String,
-        require:true
+    profileImage: {
+        type: String,
+        require: true
     },
     features: {
         type: Object,
@@ -103,7 +119,7 @@ const listings = new Schema({
         type: Object,
         require: true
     }
-})
+}, { timestamps: true })
 
 
 const Listings = mongoose.model("listings", listings);
