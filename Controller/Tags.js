@@ -13,11 +13,10 @@ const getAllTags = async (req, res) => {
 
 
   const createTag = async (req, res) => {
-    const { name, icon } = req.body;
+    const { name } = req.body;
   
     const tag = new Tags({
-      name,
-      icon
+      name
     });
   
     try {
@@ -32,7 +31,7 @@ const getAllTags = async (req, res) => {
 
 
   const updateTag = async (req, res) => {
-    const { name, icon } = req.body;
+    const { name } = req.body;
   
     try {
       const tag = await Tags.findById(req.params.id);
@@ -41,7 +40,6 @@ const getAllTags = async (req, res) => {
       }
   
       tag.name = name ? name : tag.name;
-      tag.icon = icon ? icon : tag.icon;
   
       const updatedTag = await tag.save();
       res.status(200).json(updatedTag);

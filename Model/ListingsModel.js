@@ -30,9 +30,9 @@ const listings = new Schema({
         type: String,
         require: true
     },
-    dribble: {
-        type: String,
-        require: true
+    verify: {
+        type:Boolean,
+        default: false
     },
     address: {
         type: String,

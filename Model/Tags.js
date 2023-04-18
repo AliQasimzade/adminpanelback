@@ -5,10 +5,6 @@ const tags = new Schema({
     name:{
         type:String,
         require:true
-    },
-    icon:{
-        type:String,
-        require:true
     }
 }, {timestamps:true})
 

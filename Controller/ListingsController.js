@@ -13,21 +13,21 @@ const addListing = async (req, res) => {
         previousprice, whatsapp, roadorstate,
         cityorstate, profileImage, website,
         tags, timeschedule, features,
-        slogan, dribble, uploadlink, twitter, locationCoords, type, reviews
+        slogan, uploadlink, twitter, locationCoords, type, reviews,verify
     } = req.body;
     let ratingCounts;
     let sumCounts;
-    let avg; 
-   if(reviews) {
-    ratingCounts = reviews.map(review => review.rating_count)
-    sumCounts = ratingCounts.reduce((acc, num) => acc + num, 0)
-    avg = Number(sumCounts / ratingCounts.length).toFixed(1)
-   }else {
-    avg = 0
-   }
-    
+    let avg;
+    if (reviews) {
+        ratingCounts = reviews.map(review => review.rating_count)
+        sumCounts = ratingCounts.reduce((acc, num) => acc + num, 0)
+        avg = Number(sumCounts / ratingCounts.length).toFixed(1)
+    } else {
+        avg = 0
+    }
+
     try {
-    
+
         const newListing = new Listings({
             address: address,
             category: category,
@@ -36,12 +36,12 @@ const addListing = async (req, res) => {
             reviews: reviews ? reviews : [],
             email: email,
             zipcode: zipcode,
+            verify:verify,
             twitter: twitter,
             locationCoords: locationCoords,
             uploadlink: uploadlink,
             listingTitle: listingTitle,
             facebook: facebook,
-            dribble: dribble,
             linkedin: linkedin,
             description: description,
             gallery: gallery,

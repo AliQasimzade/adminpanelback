@@ -7,12 +7,13 @@ const users = new Schema({
     surname: {
         type: String,
     },
+    image: {
+        type: String,
+        required: true
+    },
     email: {
         type: String,
         require: true
-    },
-    phone: {
-        type: String,
     },
     password: {
         type: String,

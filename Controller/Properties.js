@@ -1,4 +1,4 @@
-const {Properties} = require('../Model/Properties.js')
+const { Properties } = require('../Model/Properties.js')
 
 const getProperties = async (req, res) => {
     try {
@@ -10,12 +10,15 @@ const getProperties = async (req, res) => {
 }
 
 const createProperty = async (req, res) => {
-    const { icon,name} = req.body;
+    const { icon, name } = req.body;
 
     try {
+        const nameInfo = await Properties.findOne({ name: name });
+        if (nameInfo) return res.json("This feature already exsist");
+
         const property = new Properties({
-           icon,
-           name
+            icon,
+            name
         });
 
         const newProperty = await property.save();
@@ -26,7 +29,7 @@ const createProperty = async (req, res) => {
 }
 
 const updateProperty = async (req, res) => {
-    const { name,icon } = req.body;
+    const { name, icon } = req.body;
 
     try {
         const property = await Properties.findById(req.params.id);
@@ -45,7 +48,7 @@ const updateProperty = async (req, res) => {
 }
 
 
-const deleteProperty = async (req,res) => {
+const deleteProperty = async (req, res) => {
     try {
         const property = await Properties.findById(req.params.id);
         if (!property) {
