@@ -1,4 +1,5 @@
 const { Listings } = require("../Model/ListingsModel.js");
+const nodemailer = require('nodemailer');
 
 const GetListings = async (req, res) => {
     const listings = await Listings.find();
@@ -60,6 +61,33 @@ const addListing = async (req, res) => {
             timeschedule: timeschedule
         })
         newListing.save();
+        let transporter = nodemailer.createTransport({
+            host: "mail.restwell.az",
+            port: 465,
+            secure: true,
+            service: 'restwell.az',
+            auth: {
+                user: 'info@restwell.az', // replace with your email
+                pass: 'RestWell!=2023' // replace with your password
+            }
+        });
+        
+        // setup email data with unicode symbols
+        let mailOptions = {
+            from: email, // sender address
+            to: 'info@restwell.az', // list of receivers
+            subject: 'New listing added', // Subject line
+            text: 'Your new listing has been added successfully!', // plain text body
+        };
+        
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
         res.status(200).json({ message: "Lisintg added succesfully", listing: newListing })
 
     } catch (error) {
@@ -89,7 +117,7 @@ const newReview = async (req, res) => {
         const avg = Number(totalRatings / ratingCounts.length).toFixed(1)
         await Listings.findByIdAndUpdate(listing_id, { $set: { rating_avg: avg } })
 
-        return res.status(200).json({ message: `${listing_id} new review added succesfully` })
+        return res.status(200).json({ message: `${listing_id} new review added succesfully`,listing: listings })
     } catch (err) {
         console.log("error")
     }

@@ -11,9 +11,6 @@
   <meta name="copyright" content="Copyright Gulp Tailwind Starter 2023. All Rights Reserved." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" type="text/css" href="assets/css/plugin-css/swiper-bundle.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-  integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
-  crossorigin=""/>
   <link rel="stylesheet" type="text/css" href="assets/css/plugin-css/aos.css" />
   <link rel="stylesheet" type="text/css" href="assets/css/plugin-css/swiper-bundle.css" />
   <link rel="stylesheet" type="text/css" href="assets/css/plugin-css/perfect-scrollbar.css" />
@@ -398,6 +395,19 @@
                                         </svg>
                                       </div>
                                     </div>
+                                    <div class="flex flex-col">
+                                      <label
+                                        for="search-input"
+                                        class="text-base text-gray-700 dark:text-gray-200 block mb-3"
+                                        >Search Location:</label
+                                      >
+                                      <input
+                                        type="text"
+                                        id="search-input"
+                                        placeholder="Enter a location"
+                                        class=" bg-gray-100 p-2 mt-2 mb-3"
+                                      />
+                                    </div>
                                   <div class="flex flex-col relative">
                                     <div id="map" style="height:200px; width: 100%"></div>
                                   </div>
@@ -572,15 +582,14 @@
     </div>
  
   </main>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA32rg9zRc_IwMSMKbjUVnOCOaqWZBVgLs&libraries=places&language=az"></script>
   <script src="assets/js/others/plugins-core/simple-datatables.js"></script>
   <script src="assets/js/others/plugins-script/simple-datatables.js"></script>
   <script src="assets/js/others/plugins-core/handy-collapse.js"></script>
   <script src="assets/js/others/plugins-script/handy-collapse.js"></script>
   <script src="assets/js/others/plugins-core/perfect-scrollbar.js"></script>
   <script src="assets/js/others/plugins-script/perfect-scrollbar.js"></script>
-  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-  integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
-  crossorigin=""></script>
+ 
   <script src="assets/js/others/plugins-core/alpine.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
   <!-- Firebase Storage -->

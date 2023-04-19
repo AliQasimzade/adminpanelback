@@ -69,53 +69,280 @@ let map;
 let marker;
 let long;
 let lat;
-navigator.geolocation.getCurrentPosition(position => {
-    let { latitude, longitude } = position.coords
-    long = longitude
-    lat = latitude
-    console.log(lat, long);
-    map = L.map('map').setView([latitude, longitude], 17);
+let mapType = "google";
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
-    marker = L.marker([latitude, longitude]).addTo(map);
-    var url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + latitude + '&lon=' + longitude;
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            city.innerHTML = data.address.state
-            address.innerHTML = data.display_name
-            locations.innerHTML = data.display_name.split(',')[0];
-            marker.bindPopup(`${data.display_name}`).openPopup()
-        });
-    map.on('click', function (e) {
-        if (marker) {
-            map.removeLayer(marker)
-            console.log(e.latlng);
-            marker = L.marker(e.latlng).addTo(map)
+function initMap(latitude, longitude) {
+    lat= latitude;
+    long = longitude;
+    console.log(lat, long)
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: latitude, lng: longitude },
 
-            const latitude = e.latlng.lat
-            const longtitude = e.latlng.lng
-            long = e.latlng.lng
-            lat = e.latlng.lat
-            console.log(lat, long)
-            var url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + latitude + '&lon=' + longitude;
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    city.innerHTML = data.address.state
-                    address.innerHTML = data.display_name
-                    locations.innerHTML = data.display_name.split(',')[0];
-                    marker.bindPopup(`${data.display_name}`).openPopup()
-                });
+        zoom: 17,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false,
+        zoomControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_BOTTOM,
+        },
+        restriction: {
+            latLngBounds: {
+                north: 41.9946,
+                south: 38.3895,
+                west: 44.7749,
+                east: 50.3924
+            },
+            strictBounds: true
         }
-    })
-})
+    });
 
+    // Create a custom "My location" button that looks like the default Google Maps button
+    const myLocationButton = document.createElement("button");
+    myLocationButton.style.backgroundColor = "#fff";
+    myLocationButton.style.border = "none";
+    myLocationButton.style.outline = "none";
+    myLocationButton.style.width = "28px";
+    myLocationButton.style.height = "28px";
+    myLocationButton.style.borderRadius = "2px";
+    myLocationButton.style.boxShadow = "0 1px 4px rgba(0,0,0,0.3)";
+    myLocationButton.style.cursor = "pointer";
+    myLocationButton.style.marginRight = "10px";
+    myLocationButton.style.padding = "0";
+    myLocationButton.title = "My location";
+    myLocationButton.innerHTML =
+        '<img src="https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png" style="pointer-events:none">';
+    myLocationButton.addEventListener("click", showMyLocation);
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(
+        myLocationButton
+    );
+
+    marker = new google.maps.Marker({
+        position: { lat: latitude, lng: longitude },
+        map: map,
+    });
+
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode(
+        { location: { lat: latitude, lng: longitude } },
+        (results, status) => {
+            if (status === "OK") {
+                console.log(results[0]);
+                city.innerHTML = results[0].address_components.filter(
+                    (c) =>
+                        c.types.includes("administrative_area_level_1") ||
+                        c.types.includes("locality")
+                )[0].long_name;
+                const findRaion = results[0].address_components.map(re => re)
+                    const findType = findRaion.map(f => {
+                        if(f.types.some(r => r == "sublocality")) {
+                            return f.short_name
+                        }
+                    }).filter(Boolean)
+                    console.log(findType);
+                address.innerHTML = results[0].formatted_address.split(',')[0] + "," + findType[0] + "," + results[0].formatted_address.split(',')[1] + "," + results[0].formatted_address.split(',')[2];
+             
+              
+                locations.innerHTML = results[0].formatted_address.split(',')[0];
+                marker.addListener("click", () => {
+                    infowindow.setContent(null)
+                    infowindow.setContent(results[0].formatted_address);
+                    infowindow.open(map, marker);
+                });
+                var infowindow = new google.maps.InfoWindow({
+                    content: results[0].formatted_address,
+                });
+                infowindow.open(map, marker);
+            } else {
+                console.log(
+                    "Geocode was not successful for the following reason: " + status
+                );
+            }
+        }
+    );
+
+    map.addListener("click", function (e) {
+        marker.setPosition(e.latLng);
+        const latitude = e.latLng.lat();
+        const longitude = e.latLng.lng();
+        long = longitude;
+        lat = latitude;
+        console.log(lat, long);
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode(
+            { location: { lat: latitude, lng: longitude } },
+            (results, status) => {
+                if (status === "OK") {
+                    console.log(results[0]);
+                    city.innerHTML = results[0].address_components.filter(
+                        (c) =>
+                            c.types.includes("administrative_area_level_1") ||
+                            c.types.includes("locality")
+                    )[0].long_name;
+                    const findRaion = results[0].address_components.map(re => re)
+                    const findType = findRaion.map(f => {
+                        if(f.types.some(r => r == "sublocality")) {
+                            return f.short_name
+                        }
+                    }).filter(Boolean)
+                    console.log(findType);
+                    address.innerHTML = results[0].formatted_address.split(',')[0] + "," + findType[0] + "," + results[0].formatted_address.split(',')[1] ;
+                    locations.innerHTML =
+                        results[0].formatted_address.split(",")[0];
+                    marker.addListener("click", () => {
+                        infowindow.setContent(results[0].formatted_address);
+                        infowindow.open(map, marker);
+                    });
+                    var infowindow = new google.maps.InfoWindow({
+                        content: results[0].formatted_address,
+                    });
+                    infowindow.open(map, marker);
+                } else {
+                    console.log(
+                        "Geocode was not successful for the following reason: " +
+                        status
+                    );
+                }
+            }
+        );
+    });
+
+    // Add autocomplete functionality to the search input field
+    const searchInput = document.getElementById("search-input");
+    const autocomplete = new google.maps.places.Autocomplete(searchInput);
+    autocomplete.setFields(["geometry"]);
+
+    autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+
+        const location = place.geometry.location;
+        console.log(location);
+        if (marker) {
+            marker.setPosition(location);
+            const latitude = location.lat();
+            const longitude = location.lng();
+            long = longitude;
+            lat = latitude;
+            console.log(lat, long);
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode(
+                { location: { lat: latitude, lng: longitude } },
+                (results, status) => {
+                    if (status === "OK") {
+                        console.log(results[0]);
+                        city.innerHTML = results[0].address_components.filter(
+                            (c) =>
+                                c.types.includes("administrative_area_level_1") ||
+                                c.types.includes("locality")
+                        )[0].long_name;
+
+                        const findRaion = results[0].address_components.map(re => re)
+                        const findType = findRaion.map(f => {
+                            if(f.types.some(r => r == "sublocality")) {
+                                return f.short_name
+                            }
+                        }).filter(Boolean)
+                        console.log(findType);
+                    address.innerHTML = results[0].formatted_address.split(',')[0] + "," + findType[0] + "," + results[0].formatted_address.split(',')[1] + "," + results[0].formatted_address.split(',')[2];
+    
+                        locations.innerHTML =
+                            results[0].formatted_address.split(",")[0];
+                        marker.addListener("click", () => {
+                            infowindow.setContent(results[0].formatted_address);
+                            infowindow.open(map, marker);
+                        });
+                        var infowindow = new google.maps.InfoWindow({
+                            content: results[0].formatted_address,
+                        });
+                        infowindow.open(map, marker);
+                    } else {
+                        console.log(
+                            "Geocode was not successful for the following reason: " +
+                            status
+                        );
+                    }
+                }
+            );
+        } else {
+            
+        }
+        map.setCenter(location);
+        map.setZoom(17);
+    });
+
+    function showMyLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                const location = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                };
+                if (marker) {
+                    marker.setPosition(location);
+                } else {
+                   
+                }
+                map.setCenter(location);
+                map.setZoom(17);
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode(
+                    { location: { lat: location.lat, lng: location.lng } },
+                    (results, status) => {
+                        if (status === "OK") {
+                            console.log(results[0]);
+                            city.innerHTML = results[0].address_components.filter(
+                                (c) =>
+                                    c.types.includes("administrative_area_level_1") ||
+                                    c.types.includes("locality")
+                            )[0].long_name;
+                            const findRaion = results[0].address_components.map(re => re)
+                            const findType = findRaion.map(f => {
+                                if(f.types.some(r => r == "sublocality")) {
+                                    return f.short_name
+                                }
+                            }).filter(Boolean)
+                            console.log(findType);
+                        address.innerHTML = results[0].formatted_address.split(',')[0] + "," + findType[0] + "," + results[0].formatted_address.split(',')[1] + "," + results[0].formatted_address.split(',')[2];
+        
+                            locations.innerHTML =
+                                results[0].formatted_address.split(",")[0];
+                            marker.addListener("click", () => {
+                                infowindow.setContent(results[0].formatted_address);
+                                infowindow.open(map, marker);
+                            });
+                            var infowindow = new google.maps.InfoWindow({
+                                content: results[0].formatted_address,
+                            });
+                            infowindow.open(map, marker);
+                        } else {
+                            console.log(
+                                "Geocode was not successful for the following reason: " +
+                                status
+                            );
+                        }
+                    }
+                );
+            });
+        }
+    }
+}
+
+function loadMap() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            console.log(position.coords);
+            const location = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+            };
+            initMap(location.lat, location.lng);
+        });
+    } else {
+        // Default location
+        initMap(37.7749, -122.4194);
+    }
+}
+
+window.onload = loadMap;
 
 const getAllCatAndTags = async () => {
     try {
@@ -274,13 +501,13 @@ submitBtn.addEventListener('click', async (e) => {
                 return tag.nextElementSibling.children[0].innerHTML
             }
         }).filter(Boolean)
-    
+
         const features = [...allFeatures].map(tag => {
             if (tag.checked) {
                 return tag.nextElementSibling.children[0].innerHTML
             }
         }).filter(Boolean)
-        console.log(tags,features)
+        console.log(tags, features)
         if (tags.length == 0 ||
             features.length == 0 ||
             imageUrls.length == 0 ||
@@ -383,7 +610,7 @@ submitBtn.addEventListener('click', async (e) => {
                 tags,
                 features,
             }
-
+console.log(newListing)
             const req = await fetch('https://restwell.az/api/addnewlisting', {
                 method: "POST",
                 headers: {
